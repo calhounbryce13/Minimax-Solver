@@ -4,7 +4,6 @@
     --border: rgba(255, 0, 0, 0);
 }
 
-
 ::-webkit-scrollbar{
     width: 1vw;
 }
@@ -97,6 +96,7 @@ body{
 }
 
 #player-selection{
+    position: relative;
     width: 100%;
     height: auto;
     display: flex;
@@ -109,6 +109,10 @@ body{
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+.chosen{
+    background-color: blue !important;
 }
 
 #tokens > div{
@@ -174,4 +178,23 @@ body{
 }
 button{
     cursor: pointer;
+}
+
+
+#canvas{
+    position: absolute;
+    top: 0%;
+    left: 0%;
+    height: 50vh;
+    width: 60vw;
+    background-color: white;
+    opacity: 0;
+    z-index: -1;
+    transition: z-index 0.1s, opacity 1s ease-in-out;
+
+}
+
+.in-session{
+    z-index: 1 !important;
+    opacity: 0.5 !important;
 }
