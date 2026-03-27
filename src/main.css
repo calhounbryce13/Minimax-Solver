@@ -182,9 +182,9 @@ button{
 #canvas{
     position: absolute;
     top: 0%;
-    left: 0%;
+    left: -5%;
     height: 50vh;
-    width: 60vw;
+    width: 70vw;
     background-color: white;
     opacity: 0;
     z-index: -1;
