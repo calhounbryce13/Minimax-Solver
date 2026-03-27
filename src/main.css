@@ -4,6 +4,16 @@
     --border: rgba(255, 0, 0, 0);
 }
 
+
+::-webkit-scrollbar{
+    width: 1vw;
+}
+
+::-webkit-scrollbar-thumb{
+    border-radius: 20px;
+    background-color: black;
+}
+
 html, body{
     overflow-x: hidden;
     height: auto;
@@ -43,13 +53,14 @@ body{
     width: 100%;
     height: auto;
     font-size: 2vw;
-    border-radius: 20px;
+    border-radius: 5px;
     font-family: inherit;
 }
 
 @media(max-width: 1100px){
     #game-controls > button{
         font-size: 10vw;
+        border-radius: 20px;
     }
 }
 
@@ -63,17 +74,19 @@ body{
 }
 
 #reset-container > button{
-    border-radius: 20px;
-    height: 2vw;
-    width: 2vw;
+    border-radius: 5px;
+    height: 2.5vw;
+    width: 2.5vw;
     border: 2px solid var(--border);
     background-color: black;
+    background-image: url("../icons/icons8-reset-100.png");
 }
 
 @media(max-width: 1100px){
     #reset-container > button{
         height: 10vw;
         width: 10vw;
+        border-radius: 20px;
     }
 }
 
@@ -99,15 +112,24 @@ body{
 }
 
 #tokens > div{
-    border-radius: 20px;
+    cursor: pointer;
+    border-radius: 5px;
     height: 2vw;
     width: 2vw;
     border: 2px solid var(--border);
     background-color: black;
 }
 
+#tokens > div:nth-child(1){
+    background-image: url("../icons/icons8-x-100.png");
+}
+
+#tokens > div:nth-child(2){
+    background-image: url("../icons/icons8-o-100.png");
+}
+
 #player-selection p {
-    font-size: 1vw;
+    font-size: 1.5vw;
 }
 
 @media(max-width: 1100px){
@@ -117,6 +139,7 @@ body{
     #tokens > div{
         height: 10vw;
         width: 10vw;
+        border-radius: 20px;
     }
     #player-selection p{
         font-size: 4vw;
@@ -148,4 +171,7 @@ body{
     background-position: center;
     background-repeat: no-repeat;
     background-size: contain;
+}
+button{
+    cursor: pointer;
 }
