@@ -1,10 +1,8 @@
-
 @import url('https://fonts.googleapis.com/css2?family=Oxanium:wght@200..800&display=swap');
+
 :root{
     --border: rgba(255, 0, 0, 0);
-
 }
-
 
 html, body{
     overflow-x: hidden;
@@ -18,13 +16,9 @@ body{
     flex-direction: column;
     justify-content: center;
     align-items: center;
-
     border: 2px solid var(--border);
-
     font-family: "Oxanium";
-
 }
-
 
 #game-controls{
     display: flex;
@@ -73,9 +67,7 @@ body{
     height: 2vw;
     width: 2vw;
     border: 2px solid var(--border);
-
     background-color: black;
-
 }
 
 @media(max-width: 1100px){
@@ -83,9 +75,7 @@ body{
         height: 10vw;
         width: 10vw;
     }
-
 }
-
 
 #game{
     margin-bottom: 3vh;
@@ -113,11 +103,8 @@ body{
     height: 2vw;
     width: 2vw;
     border: 2px solid var(--border);
-
     background-color: black;
 }
-
-
 
 #player-selection p {
     font-size: 1vw;
@@ -136,7 +123,6 @@ body{
     }
 }
 
-
 .row{
     width: auto;
     height: auto;
@@ -145,13 +131,11 @@ body{
     align-items: center;
 }
 
-
 .cell{
     height: 5vw;
     width: 5vw;
     border: 2px solid black;
 }
-
 
 @media(max-width: 1100px){
     .cell{
@@ -165,5 +149,3 @@ body{
     background-repeat: no-repeat;
     background-size: contain;
 }
-
-
