@@ -1,19 +1,44 @@
 
 'use strict';
 
+
+
 document.addEventListener("DOMContentLoaded", () => {
 
-    localStorage.removeItem("MINIMAX-SOLVER--TURN");
 
+    start_fresh_game();
     check_local_storage();
     token_select_functionality();
     start_game_functionality();
     reset_functionality();
+    cell_click_functionality();
 
 
 
 
 
+
+});
+
+
+const start_game = function(){
+    const gameGrid = [[], [], []];
+    for(let i = 0; i < 3; i++){
+        for(let j = 0; j < 3; j++){
+            gameGrid[i].push(0);
+        }
+    }
+    
+
+
+}
+
+const start_fresh_game = function(){
+    localStorage.removeItem("MINIMAX-SOLVER--TURN");
+}
+
+
+const cell_click_functionality = function(){
     const cells = Array.from(document.getElementsByClassName("cell"));
     cells.forEach((cell) => {
         cell.addEventListener("click", (event) => {
@@ -36,7 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         });
     });
-});
+}
 
 
 const check_local_storage = function(){
@@ -69,11 +94,21 @@ const start_game_functionality = function(){
         if(tokenObj){
             document.getElementById("canvas").classList.toggle("in-session");
             const whosturn = (String(JSON.parse(tokenObj)["token"]) == "o") ? 0 : 1;
-            localStorage.setItem("MINIMAX-SOLVER--TURN", JSON.stringify(whosturn))
+            localStorage.setItem("MINIMAX-SOLVER--TURN", JSON.stringify(whosturn));
+            start_game();
             return;
         }
         window.alert("Choose a token first duh");
         return;
+    });
+}
+
+
+const clear_board_UI = function(){
+    const cells = Array.from(document.getElementsByClassName("cell"));
+    cells.forEach((cell) => {
+        cell.classList.remove("x-tile-icon");
+        cell.classList.remove("o-tile-icon");
     });
 }
 
@@ -83,11 +118,10 @@ const reset_functionality = function(){
         if(localStorage.getItem("MINIMAX-SOLVER")){
             const previous = document.getElementById(String(JSON.parse(localStorage.getItem("MINIMAX-SOLVER"))["token"]));
             previous.classList.toggle("chosen");
+            clear_board_UI();
             localStorage.removeItem("MINIMAX-SOLVER");
             localStorage.removeItem("MINIMAX-SOLVER--TURN");
-            if(document.getElementById("canvas").classList.contains("in-session")){
-                document.getElementById("canvas").classList.remove("in-session");
-            }
+            document.getElementById("canvas").classList.remove("in-session");
             if(!localStorage.getItem("MINIMAX-SOLVER")){
                 window.alert("successfully reset storage");
                 return;
