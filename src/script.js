@@ -1,6 +1,15 @@
 
 'use strict';
 
+const emptyGrid = true;
+const gameGrid = [[0,0,0,], [0,0,0], [0,0,0]];
+const agent = {
+    optimal_move(){
+
+    }
+};
+
+
 
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -21,34 +30,53 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
-const start_game = function(){
-    const gameGrid = [[], [], []];
-    for(let i = 0; i < 3; i++){
-        for(let j = 0; j < 3; j++){
-            gameGrid[i].push(0);
-        }
-    }
-    
-
-
-}
-
 const start_fresh_game = function(){
     localStorage.removeItem("MINIMAX-SOLVER--TURN");
 }
 
 
+
+const toggle_player_turn = function(turnObj){
+    const newTurn = (Number(JSON.parse(turnObj)) == 1) ? 0 : 1;
+    localStorage.setItem("MINIMAX-SOLVER--TURN", JSON.stringify(newTurn));
+}
+
+const 
+
+const ai_turn = function(){
+
+    if(!emptyGrid){
+        update_internal_grid();
+        check_for_terminal();
+        const [x, y] = agent.optimal_move();
+
+
+
+    }
+    move = automatic_move();
+    update_internal_board(move);
+
+}
+
+
 const cell_click_functionality = function(){
+    /*
+    priority: time
+     */
     const cells = Array.from(document.getElementsByClassName("cell"));
     cells.forEach((cell) => {
         cell.addEventListener("click", (event) => {
-            if(localStorage.getItem("MINIMAX-SOLVER--TURN")){
-                if(Number(JSON.parse(localStorage.getItem("MINIMAX-SOLVER--TURN"))) == 1){
+            const turnObj = localStorage.getItem("MINIMAX-SOLVER--TURN");
+            if(turnObj){
+                if(Number(JSON.parse(turnObj)) == 1){
                     const element = event.target;
                     if(!(element.classList.contains("x-tile-icon")) && !(element.classList.contains("o-tile-icon"))){
                         const token = String(JSON.parse(localStorage.getItem("MINIMAX-SOLVER"))["token"]);
                         const tokenClass = (token == "x") ? "x-tile-icon" : "o-tile-icon";
                         element.classList.toggle(tokenClass);
+                        if(emptyGrid) !emptyGrid;
+                        toggle_player_turn(turnObj);
+                        ai_turn();
                         return;
                     }
                     window.alert("invalid tile, chose an empty square");
@@ -95,7 +123,6 @@ const start_game_functionality = function(){
             document.getElementById("canvas").classList.toggle("in-session");
             const whosturn = (String(JSON.parse(tokenObj)["token"]) == "o") ? 0 : 1;
             localStorage.setItem("MINIMAX-SOLVER--TURN", JSON.stringify(whosturn));
-            start_game();
             return;
         }
         window.alert("Choose a token first duh");
