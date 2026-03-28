@@ -196,3 +196,15 @@ button{
     z-index: 1 !important;
     opacity: 0.75 !important;
 }
+
+
+.x-tile-icon{
+    background-image: url("../icons/icons8-x-100.png");
+    filter: invert(1);
+
+}
+
+.o-tile-icon{
+    background-image: url("../icons/icons8-o-100.png");
+    filter: invert(1);
+}
