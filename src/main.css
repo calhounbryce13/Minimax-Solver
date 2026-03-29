@@ -199,12 +199,10 @@ button{
 
 
 .x-tile-icon{
-    background-image: url("../icons/icons8-x-100.png");
-    filter: invert(1);
+    background-image: url("../icons/icons8-x-game-100.png");
 
 }
 
 .o-tile-icon{
-    background-image: url("../icons/icons8-o-100.png");
-    filter: invert(1);
+    background-image: url("../icons/icons8-o-game-100.png");
 }

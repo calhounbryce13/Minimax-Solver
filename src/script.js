@@ -1,13 +1,45 @@
 
 'use strict';
 
-const emptyGrid = true;
-const gameGrid = [[0,0,0,], [0,0,0], [0,0,0]];
-const agent = {
-    optimal_move(){
-
+let gameGrid = [[0,0,0], [0,0,0], [0,0,0]];
+class ai{
+    #movesMade;
+    constructor(){
+        this.#movesMade = 0;
+    }
+    get_moves(){
+        return this.#movesMade;
+    }
+    inc_moves(){
+        this.#movesMade++;
+    }
+    reset(){
+        this.#movesMade = 0;
+    }
+    optimal_move(grid){
+        console.log("finding optimal move");
     }
 };
+
+const agent = new ai();
+
+
+const shuffle_optimals = function(moves){
+    for(let i = 0; i < moves.length; i++){
+        const rand = Math.floor(Math.random() * ((moves.length) - 1));
+        const temp = moves[i];
+        moves[i] = moves[rand];
+        moves[rand] = temp;
+    }
+    console.log(moves[0]);
+    return moves;
+
+}
+const moves = [[0,0], [0,2], [1,1], [2,0], [2,2]];
+const optimal_spots = shuffle_optimals(moves);
+
+
+
 
 
 
@@ -41,21 +73,60 @@ const toggle_player_turn = function(turnObj){
     localStorage.setItem("MINIMAX-SOLVER--TURN", JSON.stringify(newTurn));
 }
 
-const 
 
-const ai_turn = function(){
-
-    if(!emptyGrid){
-        update_internal_grid();
-        check_for_terminal();
-        const [x, y] = agent.optimal_move();
-
-
-
+const check_for_terminal = function(){
+    if(agent.get_moves() > 2){
+        console.log("checking terminal");
+        return;
     }
-    move = automatic_move();
-    update_internal_board(move);
+    return;
+}
 
+
+const update_internal_grid = function(cellIndex){
+    const row = Math.floor(cellIndex / 3);
+    const col = (cellIndex - (3 * row));
+    gameGrid[row][col] = String(JSON.parse(localStorage.getItem("MINIMAX-SOLVER"))["token"]);
+}
+
+const automatic_move = function(){
+    for(let i = 0; i < optimal_spots.length; i++){
+        const playerToken = String(JSON.parse(localStorage.getItem("MINIMAX-SOLVER"))["token"]);
+        if(gameGrid[(optimal_spots[i])[0]][(optimal_spots[i])[1]] != playerToken){
+            return [(optimal_spots[i])[0], (optimal_spots[i])[1]];
+        }
+    }
+}
+
+const inject_move_to_internal_grid = function(move){
+    const agentToken = (String(JSON.parse(localStorage.getItem("MINIMAX-SOLVER"))["token"]) == "x") ? "o": "x";
+    gameGrid[move[0]][move[1]] = agentToken;
+
+    return agentToken;
+}
+
+const update_ui = function(move, agentToken){
+    const agentTokenString = agentToken + "-tile-icon";
+    ((Array.from(document.getElementsByClassName("row"))[move[0]]).children[move[1]]).classList.add(agentTokenString);
+}
+
+
+const ai_turn = function(cellIndex){
+    if(cellIndex){
+        update_internal_grid(cellIndex);
+    }
+    if(!(check_for_terminal())){
+        let move = (agent.get_moves() > 0) ? agent.optimal_move() : automatic_move();
+        agent.inc_moves();
+        const agentToken = inject_move_to_internal_grid(move);
+        update_ui(move, agentToken);
+        if(!(check_for_terminal())){
+            toggle_player_turn(localStorage.getItem("MINIMAX-SOLVER--TURN"));
+            return;
+        }
+        return;
+    }
+    return;
 }
 
 
@@ -64,7 +135,7 @@ const cell_click_functionality = function(){
     priority: time
      */
     const cells = Array.from(document.getElementsByClassName("cell"));
-    cells.forEach((cell) => {
+    cells.forEach((cell, index) => {
         cell.addEventListener("click", (event) => {
             const turnObj = localStorage.getItem("MINIMAX-SOLVER--TURN");
             if(turnObj){
@@ -74,9 +145,10 @@ const cell_click_functionality = function(){
                         const token = String(JSON.parse(localStorage.getItem("MINIMAX-SOLVER"))["token"]);
                         const tokenClass = (token == "x") ? "x-tile-icon" : "o-tile-icon";
                         element.classList.toggle(tokenClass);
-                        if(emptyGrid) !emptyGrid;
                         toggle_player_turn(turnObj);
-                        ai_turn();
+                        setTimeout(() => {
+                            ai_turn(index);
+                        }, 500)
                         return;
                     }
                     window.alert("invalid tile, chose an empty square");
@@ -123,6 +195,9 @@ const start_game_functionality = function(){
             document.getElementById("canvas").classList.toggle("in-session");
             const whosturn = (String(JSON.parse(tokenObj)["token"]) == "o") ? 0 : 1;
             localStorage.setItem("MINIMAX-SOLVER--TURN", JSON.stringify(whosturn));
+            if(!whosturn){
+                ai_turn(false);
+            }
             return;
         }
         window.alert("Choose a token first duh");
@@ -139,6 +214,14 @@ const clear_board_UI = function(){
     });
 }
 
+const clear_internal_grid = function(){
+    gameGrid = [[0,0,0], [0,0,0], [0,0,0]];
+}
+
+const reset_agent = function(){
+    agent.reset();
+}
+
 const reset_functionality = function(){
     const reset = document.getElementById('reset');
     reset.addEventListener("click", () => {
@@ -146,6 +229,8 @@ const reset_functionality = function(){
             const previous = document.getElementById(String(JSON.parse(localStorage.getItem("MINIMAX-SOLVER"))["token"]));
             previous.classList.toggle("chosen");
             clear_board_UI();
+            clear_internal_grid();
+            reset_agent();
             localStorage.removeItem("MINIMAX-SOLVER");
             localStorage.removeItem("MINIMAX-SOLVER--TURN");
             document.getElementById("canvas").classList.remove("in-session");
