@@ -2,6 +2,10 @@
 
 :root{
     --border: rgba(255, 0, 0, 0);
+
+    --main-color: #2E2E30;
+    --main-alt: #c51d34;
+    --main-background: #d6d6d6;
 }
 
 ::-webkit-scrollbar{
@@ -10,7 +14,7 @@
 
 ::-webkit-scrollbar-thumb{
     border-radius: 20px;
-    background-color: black;
+    background-color: var(--main-color);
 }
 
 html, body{
@@ -18,6 +22,7 @@ html, body{
     height: auto;
     min-height: 100vh;
     width: 100%;
+    background-color: var(--main-background);
 }
 
 body{
@@ -84,7 +89,7 @@ body{
     height: 2.5vw;
     width: 2.5vw;
     border: 2px solid var(--border);
-    background-color: black;
+    background-color: var(--main-color);
     background-image: url("../icons/icons8-reset-100.png");
 }
 
@@ -118,7 +123,7 @@ body{
 }
 
 .chosen{
-    background-color: blue !important;
+    background-color: var(--main-alt) !important;
 }
 
 #tokens > div{
@@ -127,7 +132,7 @@ body{
     height: 2vw;
     width: 2vw;
     border: 2px solid var(--border);
-    background-color: black;
+    background-color: var(--main-color);
 }
 
 
@@ -175,7 +180,7 @@ body{
 .cell{
     height: 5vw;
     width: 5vw;
-    border: 2px solid black;
+    border: 2px solid var(--main-color);
 }
 
 @media(max-width: 1100px){
@@ -200,11 +205,16 @@ button{
     left: -5%;
     height: 50vh;
     width: 70vw;
-    background-color: white;
+    background-color: var(--main-background);
     opacity: 0;
     z-index: -1;
     transition: z-index 0.1s, opacity 1s ease-in-out;
+}
 
+@media(min-width:1100px){
+    #canvas{
+        width: 20vw;
+    }
 }
 
 .in-session{
