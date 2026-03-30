@@ -231,3 +231,24 @@ button{
 .o-tile-icon{
     background-image: url("../icons/icons8-o-game-100.png");
 }
+
+#toast{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: auto;
+    width: auto;
+    transform: translateX(-50%);
+    transition: top 1s ease-in-out;
+    position: absolute;
+    left: 50%;
+    top: -50%;
+    background-color: var(--main-color);
+    font-size: 2vw;
+    color: var(--main-background);
+    padding: 3%;
+}
+
+.toast-show{
+    top: 5% !important;
+}

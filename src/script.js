@@ -34,6 +34,7 @@ const shuffle_optimals = function(moves){
 const moves = [[0,0], [0,2], [1,1], [2,0], [2,2]];
 const optimal_spots = shuffle_optimals(moves);
 
+
 document.addEventListener("DOMContentLoaded", () => {
     start_fresh_game();
     check_local_storage();
@@ -42,6 +43,27 @@ document.addEventListener("DOMContentLoaded", () => {
     reset_functionality();
     cell_click_functionality();
 });
+
+
+const show_toast = function(message){
+    console.log("toast");
+    const toast = document.getElementById("toast");
+    console.log(toast);
+    toast.textContent = message;
+    toast.classList.add("toast-show");
+    console.log(toast.classList);
+    setTimeout(() => {
+        toast.classList.remove("toast-show");
+        setTimeout(() => {
+            toast.textContent = "";
+        }, 1000);
+    }, 3000);
+}
+
+
+/*&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&*/
+/*&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&*/
+
 
 const start_fresh_game = function(){
     localStorage.removeItem("MINIMAX-SOLVER--TURN");
@@ -126,13 +148,13 @@ const cell_click_functionality = function(){
                         ai_turn(index);
                         return;
                     }
-                    window.alert("invalid tile, chose an empty square");
+                    show_toast("invalid tile, chose an empty square");
                     return;
                 }
-                window.alert("not your turn");
+                show_toast("not your turn");
                 return;
             }
-            window.alert("start the game to play a tile");
+            show_toast("start the game to play a tile");
             return;
         });
     });
@@ -172,7 +194,7 @@ const start_game_functionality = function(){
             }
             return;
         }
-        window.alert("Choose a token first duh");
+        show_toast("Choose a token first duh");
         return;
     });
 }
@@ -206,13 +228,13 @@ const reset_functionality = function(){
             localStorage.removeItem("MINIMAX-SOLVER--TURN");
             document.getElementById("canvas").classList.remove("in-session");
             if(!localStorage.getItem("MINIMAX-SOLVER")){
-                window.alert("successfully reset storage");
+                show_toast("successfully reset storage");
                 return;
             }
-            window.alert("error: could not remove storage !");
+            show_toast("error: could not remove storage !");
             return;
         }
-        window.alert("nothing to reset");
+        show_toast("nothing to reset");
         return;
     });
 }
