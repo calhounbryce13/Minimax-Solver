@@ -102,6 +102,7 @@ body{
 }
 
 #game{
+    position: relative;
     margin-bottom: 3vh;
     margin-top: 3vh;
 }
@@ -251,4 +252,54 @@ button{
 
 .toast-show{
     top: 5% !important;
+}
+
+#scoreboard{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    height: 15vw;
+    width: 15vw;
+    position: absolute;
+    top: 0%;
+    left: 0%;
+    z-index: -2;
+    overflow: hidden;
+    background-color: var(--main-color);
+}
+
+#scoreboard *{
+    color: var(--main-background);
+    border: 2px solid var(--border);
+
+}
+
+h3{
+    border: 2px solid var(--border);
+}
+
+#tallies{
+    border: 2px solid var(--border);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    height: auto;
+    background-color: #37373a;
+
+}
+
+.scores{
+    border: 2px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    width: 5vw;
+    height: auto;
+    font-size: 1vw;
+}
+
+h4, p{
+    text-align: center;
+
 }

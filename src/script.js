@@ -14,7 +14,7 @@ class ai{
         this.#movesMade++;
     }
     optimal_move(grid){
-        console.log("finding optimal move");
+        //todo: return the optimal move given the current state of the game, the current player and token
     }
 };
 
@@ -27,7 +27,6 @@ const shuffle_optimals = function(moves){
         moves[i] = moves[rand];
         moves[rand] = temp;
     }
-    console.log(moves[0]);
     return moves;
 
 }
