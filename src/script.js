@@ -2,10 +2,32 @@
 'use strict';
 
 let gameGrid = [[0,0,0], [0,0,0], [0,0,0]];
+
+
+class Node{
+    #grid;
+    #nextLevel;
+
+    constructor(grid){
+        this.#grid = grid; 
+        this.#nextLevel = [];
+    }
+
+    get_grid(){
+        return this.#grid;
+    }
+}
 class ai{
     #movesMade;
+    #agentToken;
+    #decisionTree;
     constructor(){
         this.#movesMade = 0;
+        this.#agentToken = "";
+        this.#decisionTree = [];
+    }
+    set_token(tokenObj){
+        this.#agentToken = (String(JSON.parse(tokenObj)["token"]) == "x") ? "o" : "x";
     }
     get_moves(){
         return this.#movesMade;
@@ -13,8 +35,17 @@ class ai{
     inc_moves(){
         this.#movesMade++;
     }
+    generate_decision_level(playableCells, gameGrid){
+        for(let i = 0; i < playableCells; i++){
+            this.#decisionTree.push(new Node(gameGrid));
+        }
+    }
     optimal_move(grid){
-        //todo: return the optimal move given the current state of the game, the current player and token
+        const playableCells = (this.#agentToken == "x") ? (9 - (this.#movesMade + 1)) : (9 - (this.#movesMade + 2));
+        this.generate_decision_level(playableCells, gameGrid);
+        for(let i = 0; i < this.#decisionTree.length; i++){
+            console.log(this.#decisionTree[i].get_grid());
+        }
     }
 };
 
@@ -186,6 +217,7 @@ const start_game_functionality = function(){
         const tokenObj = localStorage.getItem("MINIMAX-SOLVER");
         if(tokenObj){
             document.getElementById("canvas").classList.toggle("in-session");
+            agent.set_token(tokenObj);
             const whosturn = (String(JSON.parse(tokenObj)["token"]) == "o") ? 0 : 1;
             localStorage.setItem("MINIMAX-SOLVER--TURN", JSON.stringify(whosturn));
             if(!whosturn){

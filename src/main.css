@@ -62,9 +62,13 @@ body{
     transition: filter 0.5s ease-in-out;
 }
 
-#game-controls > button:hover{
-    filter: invert(1);
+@media(min-width:1100px){
+    #game-controls > button:hover{
+        filter: invert(1);
+    }
 }
+
+
 
 
 
@@ -248,6 +252,13 @@ button{
     font-size: 2vw;
     color: var(--main-background);
     padding: 3%;
+}
+
+@media(max-width: 1100px){
+    #toast{
+        font-size: 6vw;
+        text-wrap: nowrap;
+    }
 }
 
 .toast-show{
