@@ -59,74 +59,52 @@ class ai{
         this.#movesMade++;
     }
 
+    getEmpties() {
+        const empties = [];
+        for (let x = 0; x < 3; x++) {
+            for (let i = 0; i < 3; i++) {
+                if (gameGrid[x][i] !== 'x' && gameGrid[x][i] !== 'o') {
+                    empties.push(x, i);
+                }
+            }
+        }
+        console.log(empties);
+        return empties;
+    }
 
 
 
+    minimax(move){
+        // LEVEL 1s
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-    minimax(x_count, o_count, move, board){
-        // LEVEL 1
-
-        console.log("mini-maxxing !");
-        const emptySpaces = 9 - (x_count + o_count);
-
+        const userToken = JSON.parse(localStorage.getItem("MINIMAX-SOLVER"))["token"];
+        const toRemove = (userToken == "x") ? (this.#movesMade * 2) + 1 : (this.#movesMade * 2);
+        const emptySpaces = 9 - toRemove;
         let treeLevel = new Array(emptySpaces);
 
         for (let x = 0; x < emptySpaces; x++) {
-            let subBoard = new BoardNode();
-
+            //& WORST CASE: O(n^3) &//
+            let subBoard = new Node();
             subBoard.set_utility(0);
-
             treeLevel[x] = subBoard;
-
             for (let i = 0; i < 3; i++) {
                 for (let j = 0; j < 3; j++) {
-                    treeLevel[x].thisBoard[i][j] = board[i][j];
+                    treeLevel[x].thisBoard[i][j] = gameGrid[i][j];
                 }
             }
         }
 
-        // getting empty coordinates for decision tree
-        let emptyArray = this.get_empties(board);
+        let emptyArray = this.getEmpties();
 
-        // iterate over the tree level and insert ai token into each empty index
         let j = 0;
-
         for (let i = 0; i < emptySpaces; i++) {
-            if (x_count === o_count) {
-
-                // agent is x
-                treeLevel[i].thisBoard[emptyArray[j]][emptyArray[j + 1]] = 'x';
-                treeLevel[i].set_x(emptyArray[j]);
-                treeLevel[i].set_y(emptyArray[j + 1]);
-            }
-            else {
-
-                // agent is o
-                treeLevel[i].thisBoard[emptyArray[j]][emptyArray[j + 1]] = 'o';
-                treeLevel[i].set_x(emptyArray[j]);
-                treeLevel[i].set_y(emptyArray[j + 1]);
-            }
-
+            treeLevel[i].thisBoard[emptyArray[j]][emptyArray[j + 1]] = this.#agentToken;
+            // THIS IS HOW THE AGENT REMEMBERS THE INITAL CELL THAT WILL LEAD TO THE OPTIMAL MOVE ^//
+            treeLevel[i].set_x(emptyArray[j]);
+            treeLevel[i].set_y(emptyArray[j + 1]);
             j += 2;
         }
+
 
         // searching through each board in level
         for (let x = 0; x < emptySpaces; x++) {
@@ -272,23 +250,10 @@ class ai{
         console.log("\nSorry, still thinking :/\n");
 
         process.exit(0);
+
+
+        */
     };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
 };
 
 let agent = new ai();
