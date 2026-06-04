@@ -39,7 +39,7 @@ class Node {
     }
 };
 
-class ai{
+class Ai{
     #movesMade;
     #agentToken;
     #decisionTree;
@@ -78,17 +78,13 @@ class ai{
                 (board.thisBoard[0][i] === 'x' && board.thisBoard[1][i] === 'x' && board.thisBoard[2][i] === 'x'))
                 {
                 if (currentMax) {
-
                     // agent is x
                     board.setUtility(1);
                     return 1;
-
                 } else {
-
                     // agent is o
                     board.setUtility(-1);
                     return -1;
-
                 }
             }
             // check horizontal and vertical wins for o
@@ -97,17 +93,13 @@ class ai{
                 (board.thisBoard[0][i] === 'o' && board.thisBoard[1][i] === 'o' && board.thisBoard[2][i] === 'o')) 
                 {
                 if (currentMax) {
-
                     // agent is x
                     board.setUtility(-1);
                     return -1;
-
                 } else {
-
                     // agent is o
                     board.setUtility(1);
                     return 1;
-
                 }
             }
         }
@@ -117,7 +109,6 @@ class ai{
                 (board.thisBoard[0][0] === 'x' &&
                 board.thisBoard[1][1] === 'x' &&
                 board.thisBoard[2][2] === 'x') ||
-
                 (board.thisBoard[0][2] === 'x' &&
                 board.thisBoard[1][1] === 'x' &&
                 board.thisBoard[2][0] === 'x')
@@ -137,7 +128,6 @@ class ai{
                 (board.thisBoard[0][0] === 'o' &&
                 board.thisBoard[1][1] === 'o' &&
                 board.thisBoard[2][2] === 'o') ||
-
                 (board.thisBoard[0][2] === 'o' &&
                 board.thisBoard[1][1] === 'o' &&
                 board.thisBoard[2][0] === 'o')
@@ -158,11 +148,8 @@ class ai{
 
     newLevel(emptySpaces, treeLevel) {
         const emptySpaces2 = emptySpaces - 1;
-        // looping through first level of decision tree
         for (let x = 0; x < emptySpaces; x++) {
-            // making array of board node objects for each index
             treeLevel[x].array = new Array(emptySpaces2);
-            // populating each board on the new level
             for (let i = 0; i < emptySpaces2; i++) {
                 //& WORST CASE: O(n^3) &//
                 treeLevel[x].array[i] = new Node();
@@ -281,7 +268,7 @@ class ai{
     };
 };
 
-let agent = new ai();
+let agent = new Ai();
 
 const shuffle_optimals = function(moves){
     for(let i = 0; i < moves.length; i++){
@@ -510,7 +497,7 @@ const clear_internal_grid = function(){
 }
 
 const reset_agent = function(){
-    agent = new ai();
+    agent = new Ai();
 }
 
 const reset_functionality = function(){
