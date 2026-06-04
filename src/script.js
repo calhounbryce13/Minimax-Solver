@@ -199,12 +199,10 @@ class ai{
     }
 
     minimax(move){
-        // LEVEL 1s
         const userToken = JSON.parse(localStorage.getItem("MINIMAX-SOLVER"))["token"];
         const toRemove = (userToken == "x") ? (this.#movesMade * 2) + 1 : (this.#movesMade * 2);
         const emptySpaces = 9 - toRemove;
         let treeLevel = new Array(emptySpaces);
-
         for (let x = 0; x < emptySpaces; x++) {
             //& WORST CASE: O(n^3) &//
             let subBoard = new Node();
@@ -216,68 +214,55 @@ class ai{
                 }
             }
         }
-
         let emptyArray = this.getEmpties();
-
         let j = 0;
         for (let i = 0; i < emptySpaces; i++) {
+            //& WORST CASE: O(n) &//
             treeLevel[i].thisBoard[emptyArray[j]][emptyArray[j + 1]] = this.#agentToken;
             // THIS IS HOW THE AGENT REMEMBERS THE INITAL CELL THAT WILL LEAD TO THE OPTIMAL MOVE ^//
             treeLevel[i].set_x(emptyArray[j]);
             treeLevel[i].set_y(emptyArray[j + 1]);
             j += 2;
         }
-
         const searchBool = (this.#agentToken == "x") ? true : false;
-
         // searching through each board in level
         for (let x = 0; x < emptySpaces; x++) {
             let maxFound = this.search(treeLevel[x], searchBool);
             if (maxFound === 1) {
                 move[0] = treeLevel[x].get_x();
                 move[1] = treeLevel[x].get_y();
-                return;
+                return move;
             }
         }
-        // LEVEL 2
         this.newLevel(emptySpaces, treeLevel);
-
         let level = 2;
-
         for (let x = 0; x < emptySpaces; x++) {
             let emptyList = this.getEmpties(treeLevel[x].thisBoard);
             this.tokenInsert(treeLevel[x].array, emptyList, (emptySpaces - 1), level);
         }
-
         for (let x = 0; x < emptySpaces; x++) {
             for (let i = 0; i < (emptySpaces - 1); i++) {
                 let minFound = this.search(treeLevel[x].array[i], searchBool);
                 if (minFound === -1) {
                     move[0] = treeLevel[x].array[i].get_x();
                     move[1] = treeLevel[x].array[i].get_y();
-                    return;
+                    return move;
                 }
             }
         }
-
-        // LEVEL 3
         for (let x = 0; x < emptySpaces; x++) {
             this.newLevel((emptySpaces - 1), treeLevel[x].array);
         }
-
         level = 3;
-
         for (let x = 0; x < emptySpaces; x++) {
             for (let i = 0; i < (emptySpaces - 1); i++) {
                 let emptyList = this.getEmpties(treeLevel[x].array[i].thisBoard);
                 this.tokenInsert(treeLevel[x].array[i].array, emptyList, (emptySpaces - 2), level);
             }
         }
-
         // if maxFound is false after level 3 then return the adverse move
         // from level 2 as optimal
         let maxFound = false;
-
         for (let x = 0; x < emptySpaces; x++) {
             for (let i = 0; i < (emptySpaces - 1); i++) {
                 for (let k = 0; k < (emptySpaces - 2); k++) {
@@ -285,19 +270,11 @@ class ai{
                     if (maxFound) {
                         move[0] = treeLevel[x].get_x();
                         move[1] = treeLevel[x].get_y();
-                        return;
+                        return move;
                     }
                 }
             }
         }
-
-        if (!maxFound) {
-            // need to access the 2nd level at whichever index has -1 utility
-            // need to keep track of boards that have -1 utility in lvl 2
-        }
-
-        console.log("\nSorry, still thinking :/\n");
-
         process.exit(0);
     };
 };
@@ -396,15 +373,20 @@ const ai_turn = function(cellIndex){
         update_internal_grid(cellIndex);
         }
         if(!(check_for_terminal())){
-            let move = (agent.get_moves() > 0) ? agent.minimax() : automatic_move();
-            console.log("optimal move:", move);
-            agent.inc_moves();
-            const agentToken = inject_move_to_internal_grid(move);
-            update_ui(move, agentToken);
-            if(!(check_for_terminal())){
-                toggle_player_turn(localStorage.getItem("MINIMAX-SOLVER--TURN"));
+            let move = [];
+            move = (agent.get_moves() > 0) ? agent.minimax(move) : automatic_move();
+            if(move != undefined){
+                console.log("optimal move:", move);
+                agent.inc_moves();
+                const agentToken = inject_move_to_internal_grid(move);
+                update_ui(move, agentToken);
+                if(!(check_for_terminal())){
+                    toggle_player_turn(localStorage.getItem("MINIMAX-SOLVER--TURN"));
+                    return;
+                }
                 return;
             }
+            console.log("ERROR: OPTIMAL MOVE UNDEFINED");
             return;
         }
         return;
