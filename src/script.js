@@ -18,7 +18,7 @@ class Node {
     }
 
     // mutators
-    set_utility(value) {
+    setUtility(value) {
         this.utility = value;
     }
     set_x(value) {
@@ -38,7 +38,6 @@ class Node {
         return this.y;
     }
 };
-
 
 class ai{
     #movesMade;
@@ -68,15 +67,139 @@ class ai{
                 }
             }
         }
-        console.log(empties);
         return empties;
     }
 
+    search(board, currentMax){
+        for(let i = 0; i < 3; i++) {
+            // check horizontal and vertical wins for x
+            if ((board.thisBoard[i][0] === 'x' && board.thisBoard[i][1] === 'x' && board.thisBoard[i][2] === 'x') ||
+                (board.thisBoard[0][i] === 'x' && board.thisBoard[1][i] === 'x' && board.thisBoard[2][i] === 'x'))
+                {
+                if (currentMax) {
 
+                    // agent is x
+                    board.setUtility(1);
+                    return 1;
+
+                } else {
+
+                    // agent is o
+                    board.setUtility(-1);
+                    return -1;
+
+                }
+            }
+            // check horizontal and vertical wins for o
+            else if (
+                (board.thisBoard[i][0] === 'o' && board.thisBoard[i][1] === 'o' && board.thisBoard[i][2] === 'o') ||
+                (board.thisBoard[0][i] === 'o' && board.thisBoard[1][i] === 'o' && board.thisBoard[2][i] === 'o')) 
+                {
+                if (currentMax) {
+
+                    // agent is x
+                    board.setUtility(-1);
+                    return -1;
+
+                } else {
+
+                    // agent is o
+                    board.setUtility(1);
+                    return 1;
+
+                }
+            }
+        }
+        for (let i = 0; i < 3; i++) {
+            // check diagonal wins for x
+            if (
+                (board.thisBoard[0][0] === 'x' &&
+                board.thisBoard[1][1] === 'x' &&
+                board.thisBoard[2][2] === 'x') ||
+
+                (board.thisBoard[0][2] === 'x' &&
+                board.thisBoard[1][1] === 'x' &&
+                board.thisBoard[2][0] === 'x')
+            ) {
+                if (currentMax) {
+                    // agent is x
+                    board.setUtility(1);
+                    return 1;
+                } else {
+                    // agent is o
+                    board.setUtility(-1);
+                    return -1;
+                }
+            }
+            // check diagonal wins for o
+            else if (
+                (board.thisBoard[0][0] === 'o' &&
+                board.thisBoard[1][1] === 'o' &&
+                board.thisBoard[2][2] === 'o') ||
+
+                (board.thisBoard[0][2] === 'o' &&
+                board.thisBoard[1][1] === 'o' &&
+                board.thisBoard[2][0] === 'o')
+            ) {
+                if (currentMax) {
+                    // agent is x
+                    board.setUtility(-1);
+                    return -1;
+                } else {
+                    // agent is o
+                    board.setUtility(1);
+                    return 1;
+                }
+            }
+        }
+        return 0;
+    }
+
+    newLevel(emptySpaces, treeLevel) {
+        const emptySpaces2 = emptySpaces - 1;
+        // looping through first level of decision tree
+        for (let x = 0; x < emptySpaces; x++) {
+            // making array of board node objects for each index
+            treeLevel[x].array = new Array(emptySpaces2);
+            // populating each board on the new level
+            for (let i = 0; i < emptySpaces2; i++) {
+                //& WORST CASE: O(n^3) &//
+                treeLevel[x].array[i] = new Node();
+                treeLevel[x].array[i].setUtility(0);
+                for (let j = 0; j < 3; j++) {
+                    for (let k = 0; k < 3; k++) {
+                        treeLevel[x].array[i].thisBoard[j][k] =
+                            treeLevel[x].thisBoard[j][k];
+                    }
+                }
+            }
+        }
+    }
+
+    tokenInsert(array, emptyArray, size, lvl) {
+        /*
+        DESCRIPTION: Function defined to place either an x or o token
+                    in each board in an array of game boards.
+        */
+        let j = 0;
+        for (let x = 0; x < size; x++) {
+            // agent is o
+            if (lvl % 2 === 0) {
+                // an even level of decision tree
+                const playerToken = JSON.parse(localStorage.getItem("MINIMAX-SOLVER"))["token"];
+                array[x].thisBoard[emptyArray[j]][emptyArray[j + 1]] = playerToken;
+                array[x].set_x(emptyArray[j]);
+                array[x].set_y(emptyArray[j + 1]);
+            } else {
+                // an odd level of decision tree
+                array[x].thisBoard[emptyArray[j]][emptyArray[j + 1]] = this.#agentToken;
+            }
+            j += 2;
+        }
+    }
 
     minimax(move){
         // LEVEL 1s
-
         const userToken = JSON.parse(localStorage.getItem("MINIMAX-SOLVER"))["token"];
         const toRemove = (userToken == "x") ? (this.#movesMade * 2) + 1 : (this.#movesMade * 2);
         const emptySpaces = 9 - toRemove;
@@ -85,7 +208,7 @@ class ai{
         for (let x = 0; x < emptySpaces; x++) {
             //& WORST CASE: O(n^3) &//
             let subBoard = new Node();
-            subBoard.set_utility(0);
+            subBoard.setUtility(0);
             treeLevel[x] = subBoard;
             for (let i = 0; i < 3; i++) {
                 for (let j = 0; j < 3; j++) {
@@ -105,100 +228,49 @@ class ai{
             j += 2;
         }
 
+        const searchBool = (this.#agentToken == "x") ? true : false;
 
         // searching through each board in level
         for (let x = 0; x < emptySpaces; x++) {
-            if (x_count > o_count) {
-
-                // agent is o
-                let maxFound = this.search(treeLevel[x], false);
-
-                if (maxFound === 1) {
-                    move[0] = treeLevel[x].get_x();
-                    move[1] = treeLevel[x].get_y();
-                    return;
-                }
-            }
-            else {
-
-                // agent is x
-                let maxFound = this.search(treeLevel[x], true);
-
-                if (maxFound === 1) {
-                    move[0] = treeLevel[x].get_x();
-                    move[1] = treeLevel[x].get_y();
-                    return;
-                }
+            let maxFound = this.search(treeLevel[x], searchBool);
+            if (maxFound === 1) {
+                move[0] = treeLevel[x].get_x();
+                move[1] = treeLevel[x].get_y();
+                return;
             }
         }
-
         // LEVEL 2
-        this.new_level(emptySpaces, treeLevel);
+        this.newLevel(emptySpaces, treeLevel);
 
         let level = 2;
 
         for (let x = 0; x < emptySpaces; x++) {
-            let emptyList = this.get_empties(treeLevel[x].thisBoard);
-
-            this.token_insert(
-                treeLevel[x].array,
-                emptyList,
-                (emptySpaces - 1),
-                x_count,
-                o_count,
-                level
-            );
+            let emptyList = this.getEmpties(treeLevel[x].thisBoard);
+            this.tokenInsert(treeLevel[x].array, emptyList, (emptySpaces - 1), level);
         }
 
         for (let x = 0; x < emptySpaces; x++) {
             for (let i = 0; i < (emptySpaces - 1); i++) {
-
-                if (x_count > o_count) {
-
-                    // agent is o
-                    let minFound = this.search(treeLevel[x].array[i], false);
-
-                    if (minFound === -1) {
-                        move[0] = treeLevel[x].array[i].get_x();
-                        move[1] = treeLevel[x].array[i].get_y();
-                        return;
-                    }
-                }
-                else {
-
-                    // agent is x
-                    let minFound = this.search(treeLevel[x].array[i], true);
-
-                    if (minFound === -1) {
-                        move[0] = treeLevel[x].array[i].get_x();
-                        move[1] = treeLevel[x].array[i].get_y();
-                        return;
-                    }
+                let minFound = this.search(treeLevel[x].array[i], searchBool);
+                if (minFound === -1) {
+                    move[0] = treeLevel[x].array[i].get_x();
+                    move[1] = treeLevel[x].array[i].get_y();
+                    return;
                 }
             }
         }
 
         // LEVEL 3
         for (let x = 0; x < emptySpaces; x++) {
-            this.new_level((emptySpaces - 1), treeLevel[x].array);
+            this.newLevel((emptySpaces - 1), treeLevel[x].array);
         }
 
         level = 3;
 
         for (let x = 0; x < emptySpaces; x++) {
             for (let i = 0; i < (emptySpaces - 1); i++) {
-
-                let emptyList =
-                    this.get_empties(treeLevel[x].array[i].thisBoard);
-
-                this.token_insert(
-                    treeLevel[x].array[i].array,
-                    emptyList,
-                    (emptySpaces - 2),
-                    x_count,
-                    o_count,
-                    level
-                );
+                let emptyList = this.getEmpties(treeLevel[x].array[i].thisBoard);
+                this.tokenInsert(treeLevel[x].array[i].array, emptyList, (emptySpaces - 2), level);
             }
         }
 
@@ -209,34 +281,11 @@ class ai{
         for (let x = 0; x < emptySpaces; x++) {
             for (let i = 0; i < (emptySpaces - 1); i++) {
                 for (let k = 0; k < (emptySpaces - 2); k++) {
-
-                    if (x_count > o_count) {
-
-                        // agent is o
-                        maxFound = this.search(
-                            treeLevel[x].array[i].array[k],
-                            false
-                        );
-
-                        if (maxFound) {
-                            move[0] = treeLevel[x].get_x();
-                            move[1] = treeLevel[x].get_y();
-                            return;
-                        }
-                    }
-                    else {
-
-                        // agent is x
-                        maxFound = this.search(
-                            treeLevel[x].array[i].array[k],
-                            true
-                        );
-
-                        if (maxFound) {
-                            move[0] = treeLevel[x].get_x();
-                            move[1] = treeLevel[x].get_y();
-                            return;
-                        }
+                    maxFound = this.search(treeLevel[x].array[i].array[k], searchBool);
+                    if (maxFound) {
+                        move[0] = treeLevel[x].get_x();
+                        move[1] = treeLevel[x].get_y();
+                        return;
                     }
                 }
             }
@@ -250,9 +299,6 @@ class ai{
         console.log("\nSorry, still thinking :/\n");
 
         process.exit(0);
-
-
-        */
     };
 };
 
@@ -325,7 +371,8 @@ const update_internal_grid = function(cellIndex){
 const automatic_move = function(){
     for(let i = 0; i < optimal_spots.length; i++){
         const playerToken = String(JSON.parse(localStorage.getItem("MINIMAX-SOLVER"))["token"]);
-        if(gameGrid[(optimal_spots[i])[0]][(optimal_spots[i])[1]] != playerToken){
+        if(gameGrid[(optimal_spots[i])[0]][(optimal_spots[i])[1]] == "0"){
+            console.log((optimal_spots[i])[0], (optimal_spots[i])[1], 'IS EMPTY');
             return [(optimal_spots[i])[0], (optimal_spots[i])[1]];
         }
     }
@@ -350,6 +397,7 @@ const ai_turn = function(cellIndex){
         }
         if(!(check_for_terminal())){
             let move = (agent.get_moves() > 0) ? agent.minimax() : automatic_move();
+            console.log("optimal move:", move);
             agent.inc_moves();
             const agentToken = inject_move_to_internal_grid(move);
             update_ui(move, agentToken);
