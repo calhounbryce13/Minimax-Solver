@@ -44,6 +44,7 @@ class ai{
     #agentToken;
     #decisionTree;
     constructor(){
+        console.log("ai constructing");
         this.#movesMade = 0;
         this.#agentToken = "";
         this.#decisionTree = [];
@@ -199,6 +200,7 @@ class ai{
     }
 
     minimax(move){
+        console.log(gameGrid);
         const userToken = JSON.parse(localStorage.getItem("MINIMAX-SOLVER"))["token"];
         const toRemove = (userToken == "x") ? (this.#movesMade * 2) + 1 : (this.#movesMade * 2);
         const emptySpaces = 9 - toRemove;
@@ -294,7 +296,6 @@ const shuffle_optimals = function(moves){
 const moves = [[0,0], [0,2], [1,1], [2,0], [2,2]];
 const optimal_spots = shuffle_optimals(moves);
 
-
 document.addEventListener("DOMContentLoaded", () => {
     start_fresh_game();
     check_local_storage();
@@ -303,7 +304,6 @@ document.addEventListener("DOMContentLoaded", () => {
     reset_functionality();
     cell_click_functionality();
 });
-
 
 const show_toast = function(message){
     const toast = document.getElementById("toast");
@@ -317,11 +317,6 @@ const show_toast = function(message){
     }, 3000);
 }
 
-
-/*&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&*/
-/*&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&*/
-
-
 const start_fresh_game = function(){
     localStorage.removeItem("MINIMAX-SOLVER--TURN");
 }
@@ -331,12 +326,50 @@ const toggle_player_turn = function(turnObj){
     localStorage.setItem("MINIMAX-SOLVER--TURN", JSON.stringify(newTurn));
 }
 
-const check_for_terminal = function(){
-    if(agent.get_moves() > 2){
-        console.log("checking terminal");
-        return;
+const checkTerminal = function(token){
+    for (let i = 0; i < 3; i++) {
+        // check rows and columns for X
+        if (
+            (gameGrid[i][0] === 'x' &&
+            gameGrid[i][1] === 'x' &&
+            gameGrid[i][2] === 'x') ||
+
+            (gameGrid[0][i] === 'x' &&
+            gameGrid[1][i] === 'x' &&
+            gameGrid[2][i] === 'x')
+        ) {
+            return token === 'x' ? -1 : 1;
+        }
+
+        // check rows and columns for O
+        else if (
+            (gameGrid[i][0] === 'o' &&
+            gameGrid[i][1] === 'o' &&
+            gameGrid[i][2] === 'o') ||
+
+            (gameGrid[0][i] === 'o' &&
+            gameGrid[1][i] === 'o' &&
+            gameGrid[2][i] === 'o')
+        ) {
+            return token === 'x' ? 1 : -1;
+        }
     }
-    return;
+
+    // check diagonals for X
+    if ((gameGrid[0][0] === 'x' && gameGrid[1][1] === 'x' && gameGrid[2][2] === 'x') ||
+        (gameGrid[0][2] === 'x' && gameGrid[1][1] === 'x' && gameGrid[2][0] === 'x')) 
+    {
+        return token === 'x' ? -1 : 1;
+    }
+
+    // check diagonals for O
+    if ((gameGrid[0][0] === 'o' && gameGrid[1][1] === 'o' && gameGrid[2][2] === 'o') ||
+        (gameGrid[0][2] === 'o' && gameGrid[1][1] === 'o' && gameGrid[2][0] === 'o')) 
+    {
+        return token === 'x' ? 1 : -1;
+    }
+
+    return 0;
 }
 
 const update_internal_grid = function(cellIndex){
@@ -372,7 +405,7 @@ const ai_turn = function(cellIndex){
         if(cellIndex){
         update_internal_grid(cellIndex);
         }
-        if(!(check_for_terminal())){
+        if(!(checkTerminal())){
             let move = [];
             move = (agent.get_moves() > 0) ? agent.minimax(move) : automatic_move();
             if(move != undefined){
@@ -380,7 +413,7 @@ const ai_turn = function(cellIndex){
                 agent.inc_moves();
                 const agentToken = inject_move_to_internal_grid(move);
                 update_ui(move, agentToken);
-                if(!(check_for_terminal())){
+                if(!(checkTerminal())){
                     toggle_player_turn(localStorage.getItem("MINIMAX-SOLVER--TURN"));
                     return;
                 }
@@ -392,7 +425,6 @@ const ai_turn = function(cellIndex){
         return;
     }, 500);
 }
-
 
 const cell_click_functionality = function(){
     /*
@@ -424,7 +456,6 @@ const cell_click_functionality = function(){
         });
     });
 }
-
 
 const check_local_storage = function(){
     if(localStorage.getItem("MINIMAX-SOLVER")){
@@ -475,7 +506,7 @@ const clear_board_UI = function(){
 }
 
 const clear_internal_grid = function(){
-    gameGrid = [[0,0,0], [0,0,0], [0,0,0]];
+    gameGrid = [[0,0,0], [0,0,0], [0,0,0]]; 
 }
 
 const reset_agent = function(){
@@ -504,4 +535,4 @@ const reset_functionality = function(){
         show_toast("nothing to reset");
         return;
     });
-}
+};
