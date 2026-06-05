@@ -3,3 +3,6 @@
 ## I made this 1:1 transalation from an older c++ program that I wrote in my freshman year. 
 ## The decision tree logic was used in conjunction with minimax utility scores to implement a low level artificially intelligent gameplay agent.
 ## No external libraries or imports were used. All decision logic is in `script.js`.
+
+# How to access:
+### The app is being hosted by github. Click the link in the "About" section near the top of the page.
