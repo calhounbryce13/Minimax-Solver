@@ -107,13 +107,9 @@ class Ai{
         for (let i = 0; i < 3; i++) {
             // check diagonal wins for x
             if (
-                (board.thisBoard[0][0] === 'x' &&
-                board.thisBoard[1][1] === 'x' &&
-                board.thisBoard[2][2] === 'x') ||
-                (board.thisBoard[0][2] === 'x' &&
-                board.thisBoard[1][1] === 'x' &&
-                board.thisBoard[2][0] === 'x')
-            ) {
+                (board.thisBoard[0][0] === 'x' && board.thisBoard[1][1] === 'x' && board.thisBoard[2][2] === 'x') ||
+                (board.thisBoard[0][2] === 'x' && board.thisBoard[1][1] === 'x' && board.thisBoard[2][0] === 'x')) 
+                {
                 if (currentMax) {
                     // agent is x
                     board.setUtility(1);
@@ -265,7 +261,7 @@ class Ai{
                 }
             }
         }
-        process.exit(0);
+        show_toast("The agent is not sure what to play ... reset the game.");
     };
 };
 
@@ -283,15 +279,6 @@ const shuffle_optimals = function(moves){
 }
 const moves = [[0,0], [0,2], [1,1], [2,0], [2,2]];
 const optimal_spots = shuffle_optimals(moves);
-
-document.addEventListener("DOMContentLoaded", () => {
-    start_fresh_game();
-    check_local_storage();
-    token_select_functionality();
-    start_game_functionality();
-    reset_functionality();
-    cell_click_functionality();
-});
 
 const show_toast = function(message){
     const toast = document.getElementById("toast");
@@ -523,3 +510,12 @@ const reset_functionality = function(){
         return;
     });
 };
+
+document.addEventListener("DOMContentLoaded", () => {
+    start_fresh_game();
+    check_local_storage();
+    token_select_functionality();
+    start_game_functionality();
+    reset_functionality();
+    cell_click_functionality();
+});
