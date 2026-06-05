@@ -1,5 +1,7 @@
 'use strict';
 
+//todo: the start of the game is not very intuitive to the user. App looks broken after game start.
+
 let gameGrid = [[0,0,0], [0,0,0], [0,0,0]];
 
 class Node {
