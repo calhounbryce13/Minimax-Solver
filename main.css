@@ -94,7 +94,7 @@ body{
     width: 2.5vw;
     border: 2px solid var(--border);
     background-color: var(--main-color);
-    background-image: url("/icons/icons8-reset-100.png");
+    background-image: url("icons/icons8-reset-100.png");
 }
 
 @media(max-width: 1100px){
@@ -228,11 +228,11 @@ button{
 }
 
 .x-tile-icon{
-    background-image: url("/icons/icons8-x-game-100.png");
+    background-image: url("icons/icons8-x-game-100.png");
 }
 
 .o-tile-icon{
-    background-image: url("/icons/icons8-o-game-100.png");
+    background-image: url("icons/icons8-o-game-100.png");
 }
 
 #toast{
