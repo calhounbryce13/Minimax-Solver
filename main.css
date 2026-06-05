@@ -149,11 +149,11 @@ body{
 
 
 #tokens > div:nth-child(1){
-    background-image: url("../icons/icons8-x-100.png");
+    background-image: url("./icons/icons8-x-100.png");
 }
 
 #tokens > div:nth-child(2){
-    background-image: url("../icons/icons8-o-100.png");
+    background-image: url("./icons/icons8-o-100.png");
 }
 
 #player-selection p {
@@ -229,12 +229,11 @@ button{
 
 
 .x-tile-icon{
-    background-image: url("../icons/icons8-x-game-100.png");
-
+    background-image: url("./icons/icons8-x-game-100.png");
 }
 
 .o-tile-icon{
-    background-image: url("../icons/icons8-o-game-100.png");
+    background-image: url("./icons/icons8-o-game-100.png");
 }
 
 #toast{
