@@ -1,5 +1,4 @@
 'use strict';
-
 //todo: the start of the game is not very intuitive to the user. App looks broken after game start.
 
 let gameGrid = [[0,0,0], [0,0,0], [0,0,0]];
@@ -371,7 +370,6 @@ const automatic_move = function(){
     for(let i = 0; i < optimal_spots.length; i++){
         const playerToken = String(JSON.parse(localStorage.getItem("MINIMAX-SOLVER"))["token"]);
         if(gameGrid[(optimal_spots[i])[0]][(optimal_spots[i])[1]] == "0"){
-            console.log((optimal_spots[i])[0], (optimal_spots[i])[1], 'IS EMPTY');
             return [(optimal_spots[i])[0], (optimal_spots[i])[1]];
         }
     }
@@ -391,14 +389,14 @@ const update_ui = function(move, agentToken){
 
 const ai_turn = function(cellIndex){
     setTimeout(() => {
-        if(cellIndex){
+        console.log("internal borrad:", gameGrid, "cell index:", cellIndex);
+        if(cellIndex != undefined && cellIndex !== false){
         update_internal_grid(cellIndex);
         }
         if(!(checkTerminal())){
             let move = [];
             move = (agent.get_moves() > 0) ? agent.minimax(move) : automatic_move();
             if(move != undefined){
-                console.log("optimal move:", move);
                 agent.inc_moves();
                 const agentToken = inject_move_to_internal_grid(move);
                 update_ui(move, agentToken);
