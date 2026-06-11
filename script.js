@@ -278,7 +278,7 @@ const shuffle_optimals = function(moves){
 
 }
 const moves = [[0,0], [0,2], [1,1], [2,0], [2,2]];
-const optimal_spots = shuffle_optimals(moves);
+let optimal_spots = shuffle_optimals(moves);
 
 const show_toast = function(message){
     const toast = document.getElementById("toast");
@@ -485,6 +485,7 @@ const clear_internal_grid = function(){
 
 const reset_agent = function(){
     agent = new Ai();
+    optimal_spots = shuffle_optimals(moves);
 }
 
 const reset_functionality = function(){
