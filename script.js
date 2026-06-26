@@ -1,5 +1,25 @@
 'use strict';
-//todo: the start of the game is not very intuitive to the user. App looks broken after game start.
+//todo: the start of the game is not very intuitive to the user. App looks "broken" after game start.
+
+
+
+const log_traffic = async () => {
+    try{
+        await fetch("https://calhounbryce13-backend.onrender.com/log-traffic", {
+            method: "PUT",
+            body: JSON.stringify({
+                programName: "minimaxSolver"
+            })
+        });
+    }catch(error){
+        console.log(error);
+    }
+};
+log_traffic();
+
+
+
+
 
 let gameGrid = [[0,0,0], [0,0,0], [0,0,0]];
 
