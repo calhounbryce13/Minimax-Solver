@@ -5,7 +5,7 @@
 
 const log_traffic = async () => {
     try{
-        await fetch("https://calhounbryce13-backend.onrender.com/log-traffic", {
+        await fetch("https://calhounbryce13-backend.onrender.com/traffic-log", {
             method: "PUT",
             body: JSON.stringify({
                 programName: "minimaxSolver"
