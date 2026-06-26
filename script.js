@@ -4,7 +4,7 @@
 
 
 const log_traffic = async () => {
-    if(!(localStorage.getItem("successful-traffic-log"))){
+    if(!(localStorage.getItem("successful-traffic-log.MINIMAX"))){
         try{
             await fetch("https://calhounbryce13-backend.onrender.com/traffic-log", {
                 method: "PUT",
@@ -15,7 +15,7 @@ const log_traffic = async () => {
                     programName: "minimaxSolver"
                 })
             });
-            localStorage.setItem("successful-traffic-log", true);
+            localStorage.setItem("successful-traffic-log.MINIMAX", true);
         }catch(error){
             console.log(error);
         }
